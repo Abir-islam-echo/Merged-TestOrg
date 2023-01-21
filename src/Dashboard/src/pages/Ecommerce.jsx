@@ -9,6 +9,8 @@ import { Stacked, Pie, Button, LineChart, SparkLine } from '../components';
 import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
+import FetchData from '../Hook/fetchData';
+import Loader from '../../../Loader/Loader';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -18,63 +20,112 @@ const DropDown = ({ currentMode }) => (
 
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
+  const { data } = FetchData()
+  if (data) {
+    // code here
+  }
+
 
   return (
     <div className="mt-24">
-      <div className="flex flex-wrap lg:flex-nowrap justify-center  ">
-        <div className="bg-white shadow-xl dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
-          <div className="flex justify-between items-centerl">
-            <div>
-              <p className="font-bold text-gray-400">LAST TEST REPORT</p>
-              <p className="text-2xl text-gray-900">Physics</p>
-            </div>
-            <button
-              type="button"
-              style={{ backgroundColor: currentColor }}
-              className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
-            >
-              <FiDownload />
-            </button>
-          </div>
-          <div className="mt-6 ">
-            <Button
-              color="white"
-              bgColor={currentColor}
-              text="Download"
-              borderRadius="10px"
-            />
-          </div>
-        </div>
 
-
-
-
-        <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
-          {earningData.map((item) => (
-            <div
-              key={item.title}
-              className="shadow-xl h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl "
-            >
+      {
+        data ? <div className="flex flex-col flex-wrap lg:flex-nowrap justify-center animate__animated animate__fadeIn w-2/3 m-auto ">
+          <div className=" bg-white flex flex-col items-start shadow-2xl dark:text-gray-200 dark:bg-secondary-dark-bg h-52 rounded-xl w-full p-8 pt-9 mb-10 bg-hero-pattern bg-no-repeat bg-cover bg-center">
+            <div className="flex justify-between items-start w-full">
+              <div>
+                <p className="font-bold text-gray-400">LAST TEST REPORT</p>
+                <p className="text-2xl text-gray-900">Physics</p>
+              </div>
               <button
                 type="button"
-                style={{ color: item.iconColor, backgroundColor: item.iconBg }}
-                className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
+                style={{ backgroundColor: currentColor }}
+                className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
               >
-                {item.icon}
+                <FiDownload />
               </button>
-              <p className="mt-3">
-                <span className="text-lg font-semibold text-gray-900">
-                  {item.amount}
-                </span>
-                <span className={`text-sm text-${item.pcColor} ml-2`}>
-                  {item.percentage}
-                </span>
-              </p>
-              <p className="text-sm text-gray-400  mt-1">{item.title}</p>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="mt-10">
+              <Button
+                color="white"
+                bgColor={currentColor}
+                text="Download"
+                borderRadius="10px"
+                
+              />
+            </div>
+          </div>
+
+
+
+
+          <div className="flex flex-wrap justify-between items-center">
+            {earningData.map((item) => (
+              <div
+                data-theme="winter"
+                key={item.title}
+                className="shadow-2xl h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl "
+              >
+                <button
+                  type="button"
+                  style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                  className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
+                >
+                  {item.icon}
+                </button>
+                <p className="mt-3">
+                  <span className="text-lg font-semibold text-gray-900">
+                    {item.amount}
+                  </span>
+                  <span className={`text-sm text-${item.pcColor} ml-2`}>
+                    {item.percentage}
+                  </span>
+                </p>
+                <p className="text-sm text-gray-400  mt-1">{item.title}</p>
+              </div>
+            ))}
+          </div>
+        </div> : <span className='flex flex-col pt-64 gap-10'><Loader></Loader><p>Please wait...</p></span>
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* dont need */}
+
 
       {/* <div className="flex gap-10 flex-wrap justify-center">
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">

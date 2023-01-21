@@ -22,19 +22,6 @@ import axios from "axios";
 
 const Orders = () => {
   const editing = { allowDeleting: true, allowEditing: false };
-  const { validUser } = useAuth()
-  useEffect(() => {
-    const fetchData = async () => {
-      await axios.post('https://excited-foal-raincoat.cyclic.app/dashboard/examdata', { token: validUser.token })
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log('error: ' + error)
-        })
-    }
-    fetchData()
-  }, [validUser]);
   return (
     <div className="c-mt flex mb-52">
       <div className="min-w-[18rem] fixed sidebar dark:bg-secondary-dark-bg bg-white z-40 mt-[-67px]">
