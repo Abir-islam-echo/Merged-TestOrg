@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit:900');
+
+$LIGHTING_FLOOR: 1;
+$LIGHTING_CEIL: 2;
+$LIGHTING_FLAT: 3;
+
+@mixin text3d($primary,
+    $depth: 5,
+    $shadowsteps: 5,
+    $shadowincrementer: 3px,
+    $shadowopacity: .5,
+    $primaryshadowcolour: #000,
+    $lighting: $LIGHTING_CEIL) {
+    $predefinedShadows: (0 0 5px rgba($primaryshadowcolour, .05),
+        0 -1px 3px rgba($primaryshadowcolour, .2),
+        0 3px 5px rgba($primaryshadowcolour, .2));
+    $value: ();
+
+    @for $i from 1 through $depth {
+        $num: $i +px;
+        $hueadjust: $i;
+
+        @if($lighting ==$LIGHTING_FLOOR) {
+            $hueadjust: ($i * 2 - $depth - 5) * 1%;
+        }
+
+        @elseif($lighting ==$LIGHTING_CEIL) {
+            $hueadjust: -($i*2 + $depth - 10) * 1%;
+        }
+
+        @elseif($lighting ==$LIGHTING_FLAT) {
+            $hueadjust: -$depth * 1%;
+        }
+
+        $colour: adjust-color($primary, $lightness: $hueadjust);
+        $theShadow: 0 $num 0 $colour;
+        $value: append($value, $theShadow, comma);
+    }
+
+    @for $i from 1 through $shadowsteps {
+        @if($i >=length($predefinedShadows)) {
+            $dist: $i * $shadowincrementer;
+            $value: append($value, 0 $dist $dist rgba($primaryshadowcolour, $shadowopacity));
+        }
+
+        @else {
+            $value: append($value, nth($predefinedShadows, $i));
+        }
+    }
+
+    text-shadow: $value;
+}
+
+$primarycolour: rgb(0, 0, 0);
+
+.banner-text {
+    -webkit-text-stroke: 2px rgb(0, 0, 0);
+    line-height: 1em;
+    margin: 0;
+    width: 100%;
+
+    @include text3d(adjust-color($primarycolour, $lightness: -8%),
+        $depth: 8,
+        $primaryshadowcolour: adjust-color($primarycolour, $lightness: -10%, $saturation: +20%),
+        $shadowopacity: .3);
+}
+
+
+// typewriting
+
+.line-1 {
+
+    margin: 0 auto;
+    border-right: 2px solid rgba(255, 255, 0, 0.75);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+ 
+
+}
+
+/* Animation */
+.anim-typewriter {
+    animation: typewriter 4s steps(44) 1s 1 normal both,
+        blinkTextCursor 500ms steps(44) infinite normal;
+}
+
+@keyframes typewriter {
+
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+
+}
+
+@keyframes blinkTextCursor {
+    from {
+        border-right-color: rgba(225, 225, 225, 0.75);
+    }
+
+    to {
+        border-right-color: transparent;
+    }
+}
+
+@media only screen and (max-width:500px) {
+    .line-1 {
+        white-space: pre-wrap !important;
+    }
+
+}

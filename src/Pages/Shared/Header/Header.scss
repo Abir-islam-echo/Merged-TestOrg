@@ -1,0 +1,75 @@
+@import './../../Login/variable';
+
+.links{
+    text-decoration: none;
+    color:rgb(255, 255, 255);
+    font-size: 1.5rem;
+    padding: 0 2rem;
+    
+    
+
+}
+.bt{
+    outline: none;
+    border: none;
+    border-radius: 48px;
+    background-color: $primary-color;
+    color: white;
+    /* text-transform: uppercase; */
+    font-weight: 650;
+    margin: 10px 0;
+    transition: all 0.5s;
+    outline: 1px solid white;
+
+}
+
+.btn:hover{
+    // background-color: $secondary-color;
+    
+}
+
+.nav-bg{
+    background-color: $nav-fot;
+}
+
+
+
+.nb-custom {
+	background-size: 400% 400%;
+	animation: gradient 12s ease infinite !important;
+}
+
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+// .nb-custom {
+//     -webkit-animation: AnimationName 7s ease infinite;
+//     -moz-animation: AnimationName 7s ease infinite;
+//     animation: AnimationName 7s ease infinite;
+// }
+
+// @-webkit-keyframes AnimationName {
+//     0%{background-position:0% 29%}
+//     50%{background-position:100% 72%}
+//     100%{background-position:0% 29%}
+// }
+// @-moz-keyframes AnimationName {
+//     0%{background-position:0% 29%}
+//     50%{background-position:100% 72%}
+//     100%{background-position:0% 29%}
+// }
+// @keyframes AnimationName {
+//     0%{background-position:0% 29%}
+//     50%{background-position:100% 72%}
+//     100%{background-position:0% 29%}
+// }
