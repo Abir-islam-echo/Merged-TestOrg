@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useStateContext } from '../contexts/ContextProvider';
 
-const Header = ({ category, title }) => (
-  <div className=" mb-10 bg-blue-300 py-5 rounded-md bg-gradient-to-r from-indigo-800 via-cyan-500 to-indigo-800 nb-custom">
-    {/* <p className="text-lg text-gray-400">{category}</p> */}
-    <p className="text-3xl font-bold tracking-tight text-slate-50">
-      {title}
-    </p>
-  </div>
-);
+const Header = ({ category, title }) => {
+  const { currentColor } = useStateContext()
+  return (
+
+    <div data-theme="garden" className={`mb-10 py-5 rounded-md shadow-xl`}>
+      {/* <p className="text-lg text-gray-400">{category}</p> */}
+      <p className="text-3xl font-bold tracking-tight">
+        {title}
+      </p>
+    </div>
+  );
+}
 
 export default Header;
+
+

@@ -12,7 +12,7 @@ const Kanban = () => (
     <div className='min-w-[18rem]'></div>
 
       <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-xl w-full shadow-2xl min-h-[770px] animate__animated animate__fadeInLeft">
-        <Header category="App" title="Kanban" />
+        <Header category="App" title="To Do" />
         <KanbanComponent
           id="kanban"
           keyField="Status"
@@ -20,7 +20,7 @@ const Kanban = () => (
           cardSettings={{ contentField: "Summary", headerField: "Id" }}
         >
           <ColumnsDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            
             {kanbanGrid.map((item, index) => (
               <ColumnDirective key={index} {...item} />
             ))}
