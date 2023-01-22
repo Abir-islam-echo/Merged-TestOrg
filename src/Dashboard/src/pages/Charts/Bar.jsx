@@ -8,8 +8,6 @@ import useAuth from '../../../../Hooks/useAuth';
 
 const Bar = () => {
   const { currentMode } = useStateContext();
-  const { validUser } = useAuth()
-  console.log(validUser)
 
   return (
     <div className='c-mt flex mb-52'>
@@ -17,7 +15,7 @@ const Bar = () => {
         <Sidebar />
       </div>
       <div className='min-w-[18rem]'></div>
-      <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-xl w-full shadow-2xl min-h-[770px]">
+      <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-xl w-full shadow-2xl min-h-[770px] animate__animated animate__fadeIn">
         <ChartsHeader category="Bar" title="Marks Comparison of Last 3 Tests" />
         <ChartComponent
           id="charts"
