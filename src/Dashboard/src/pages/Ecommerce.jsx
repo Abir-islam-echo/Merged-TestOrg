@@ -21,7 +21,7 @@ const DropDown = ({ currentMode }) => (
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
 
-  const { data } = FetchData()         //fetched data from dahsboard/src/hook/hook.js
+  const { data } = FetchData()         //fetched data from dahsboard/src/hook/fetchData.js
   // u can fetch data like this
   // const { data, data1, data2, ........} = FetchData()
 

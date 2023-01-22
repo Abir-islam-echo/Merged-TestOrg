@@ -14,9 +14,12 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { set } from 'date-fns';
 import { Checkbox } from 'react-miui';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const Room = () => {
+    let b;
     const [a, setA] = useState(true)
     const { validUser } = useAuth()
     const [date, setDate] = useState(null);
@@ -25,7 +28,15 @@ const Room = () => {
     const [courseName, setCourseName] = useState('');
     const [teacherName, setTeacherName] = useState(null);
     const [markingType, setMarkingType] = useState(false);
+    const [copyQuestion, setCopyQuestion] = useState(false);
+    const [roomCode, setRoomCode] = useState(null);
     const navigate = useNavigate()
+    const fetchRoom = (e) => {
+        if (e.target.checked)
+            setCopyQuestion(true)
+        else
+            setCopyQuestion(false)
+    }
 
     const neg = (e) => {
         if (e.target.checked)
@@ -34,7 +45,185 @@ const Room = () => {
             setMarkingType(false)
     }
     const test = () => {
-        if (date && startTime && endTime && courseName && (teacherName || validUser?.userName)) {
+
+
+        if (copyQuestion || roomCode) {
+            if (roomCode && copyQuestion) {
+                if (date && startTime && endTime && courseName && (teacherName || validUser?.userName)) {
+                    let timerInterval
+                    Swal.fire({
+                        text: 'Copying questiions',
+                        didOpen: () => {
+                            Swal.showLoading()
+                            timerInterval = setInterval(() => {
+                            }, 1000)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    })
+                    const sendRoom = async () => {
+                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-room`, { token: validUser.token, roomID: roomCode })
+                            .then(response => {
+                                // console.log(response.data.questions);
+
+                                const getRandom = (array) => {
+                                    let ranNums = [],
+                                        length = array.length,
+                                        index = 0;
+                                    while (length--) {
+                                        index = Math.floor(Math.random() * (length + 1));
+                                        if (array[index]?.question_type === 'mcq') {
+                                            array[index].options = getRandom(array[index].options)
+                                        }
+                                        ranNums.push(array[index]);
+                                        array.splice(index, 1);
+                                    }
+                                    return ranNums;
+                                }
+                                const question = getRandom(response.data.questions)
+                                // navigate('/Student/Exam', { state: { room: room, questions: question } })
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Question copied successfully',
+                                    showCancelButton: true,
+                                    showConfirmButtont: true,
+                                    confirmButtonText: 'proceed'
+                                })
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            // save the confirmation
+                                            let timerInterval
+                                            Swal.fire({
+                                                title: 'Saving...',
+                                                text: 'Please wait...',
+                                                didOpen: () => {
+                                                    Swal.showLoading()
+                                                    timerInterval = setInterval(() => {
+                                                    }, 1000)
+                                                },
+                                                willClose: () => {
+                                                    clearInterval(timerInterval)
+                                                }
+                                            })
+                                            const getInGlobalFormat = (date, time) => {
+                                                return `${date} ${time}`;
+                                            };
+                                            const newStartTime = getInGlobalFormat(date?.$d?.toDateString(), startTime?.$d?.toLocaleTimeString());
+                                            const newEndTime = getInGlobalFormat(date?.$d?.toDateString(), endTime?.$d?.toLocaleTimeString());
+                                            const room = {
+                                                token: validUser?.token,
+                                                startTime: newStartTime,
+                                                endTime: newEndTime,
+                                                courseName: courseName,
+                                                teacherName: teacherName ? teacherName : validUser?.userName,
+                                                totalMarks: response.data.totalMarks,
+                                                negMarks: markingType,
+                                                createdAt: new Date(),
+                                                questions: question
+                                            }
+                                            // console.log('room', room)
+
+                                            async function sendData(room) {
+                                                // console.log('called')
+                                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/add-room`, room)
+                                                    .then(response => {
+                                                        // setGetRoomCode(response.data.roomCode)
+                                                        console.log('after adding room', response)
+                                                        setTimeout(() => {
+                                                            Swal.fire({
+                                                                title: 'Created exam',
+                                                                text: 'send the exam code to your student',
+                                                                icon: 'success',
+                                                                confirmButtonText: 'generate code'
+                                                            }).then(() => {
+                                                                Swal.fire({
+                                                                    text: 'Please wait...',
+                                                                    didOpen: () => {
+                                                                        Swal.showLoading()
+                                                                        timerInterval = setInterval(() => {
+                                                                        }, 1000)
+                                                                    },
+                                                                    willClose: () => {
+                                                                        clearInterval(timerInterval)
+                                                                    }
+                                                                })
+                                                                setTimeout(() => {
+                                                                    Swal.fire({
+                                                                        title: 'Exam code',
+                                                                        html: `<b>${response.data.roomCode}</b><br>you can find this code in your room`,
+                                                                        icon: 'success',
+                                                                        confirmButtonText: 'copy',
+                                                                        didOpen: () => {
+                                                                            b = Swal.getHtmlContainer().querySelector('b').textContent
+                                                                        },
+                                                                    }).then(() => {
+                                                                        navigator.clipboard.writeText(b);
+                                                                        toast.success('Code copied', {
+                                                                            autoClose: 2000,
+                                                                            toastId: 'customId',
+                                                                            position: 'top-right',
+                                                                            theme: 'colored'
+                                                                        })
+                                                                        navigate('/myRooms')
+
+                                                                    })
+                                                                }, 2000)
+                                                            })
+
+                                                        }, 1000)
+                                                    })
+                                                    .catch(err => {
+                                                        toast.error(err, {
+                                                            autoClose: 2000,
+                                                            toastId: 'customId',
+                                                            position: 'top-right',
+                                                            theme: 'colored'
+                                                        })
+                                                    })
+                                            }
+                                            sendData(room)
+
+                                            localStorage.setItem('question', JSON.stringify(question))
+                                        }
+                                    })
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'room does not exist',
+                                    text: 'please try again later'
+                                })
+                            })
+                    }
+                    sendRoom();
+
+                    // 
+                }
+                else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Please fil up all the fields',
+                    })
+                }
+
+
+
+            }
+            else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: `Please ${copyQuestion ? 'give the room code' : 'check the checkbox'} to copy questions`,
+                })
+            }
+        }
+
+
+
+
+
+
+        else if (date && startTime && endTime && courseName && (teacherName || validUser?.userName)) {
             navigate('/Form_test', { state: { date: date, startTime: startTime, endTime: endTime, courseName: courseName, teacherName: teacherName ? teacherName : validUser?.userName, markingType: markingType } });
         }
         else {
@@ -53,19 +242,28 @@ const Room = () => {
     // toLocaleTimeString() -->'2:00:00 AM'
     // getTime() -->'2:00:00 AM' -->1672344000757 mseconds
     return (
-        <div className='container min-h-screen c-mt m-auto pb-20'>
-            <div className="flex md:flex-row justify-around gap-10 md:pt-24 flex-col">
-                <div className="content w-full md:w-1/3 flex flex-col gap-10 lg:gap-24">
+        <div className='container min-h-screen c-mt m-auto'>
+            <div className="flex md:flex-row justify-around gap-10 md:pt-16 flex-col items-start">
+                <div className="content w-full md:w-1/3 flex flex-col gap-10 lg:gap-10">
 
                     <div className='text-start'><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>Teacher</label><input defaultValue={validUser?.userName} onInput={(e) => setTeacherName(e.target.value)} className='mt-5 h-14 input border-2  border-cyan-700 animate__animated animate__slideInLeft' type="text" placeholder='teachers name' /></div>
 
                     <div className='text-start'><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>Course</label><input onInput={(e) => setCourseName(e.target.value)} className='mt-5 h-14 input border-2 border-cyan-700 animate__animated animate__slideInLeft' type="text" placeholder='course name' /></div>
-                    <div className="form-control w-2/3 animate__animated animate__slideInLeft mt-[-30px]">
-                        <label className="cursor-pointer label">
-                            <input onInput={(e) => { neg(e) }} type="checkbox" className="checkbox checkbox-info  border-4" />
-                            <span className="label-text text-gray-500 font-semibold text-xl">Negative Marking <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
+
+                    <div className="flex flex-col animate__animated animate__slideInLeft pt-20 items-start justify-center gap-8 mt-[-70px]">
+                        <label className="cursor-pointer label p-0">
+                            <input onInput={(e) => { neg(e) }} type="checkbox" className="checkbox checkbox-info  border-2" />
+                            <span className="label-text text-gray-500 font-semibold text-xl pl-6">Negative Marking <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
                         </label>
+                        <span>
+                            <label className="cursor-pointer label flex items-center p-0 mb-5">
+                                <input onInput={(e) => { fetchRoom(e) }} type="checkbox" className="checkbox checkbox-info  border-2" />
+                                <span className="label-text text-gray-500 font-semibold text-xl pl-6">Import question from another room <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
+                            </label>
+                            <input onInput={(e) => setRoomCode(e.target.value)} className='h-10 input border-2  border-cyan-700 animate__animated animate__slideInLeft' type="text" placeholder='room code' />
+                        </span>
                     </div>
+
                 </div>
                 <div className='lg:w-1/3'>
                     <div className='pb-5 text-start'>
@@ -106,8 +304,28 @@ const Room = () => {
                     </LocalizationProvider>
                 </div>
             </div>
-            <div className='button-wrapper pt-40 animate__animated animate__fadeInUp'>
-                <button onClick={() => test()} className='button-custom bg-gradient-to-tr from-indigo-800 via-cyan-500 to-indigo-800 btn  text-white px-16 hover:bg-indigo-700 border-none hover:tracking-widest transition-all'>Create Question &nbsp;&nbsp;&rarr;</button>
+
+
+
+            {/* <div className="flex animate__animated animate__slideInLeft pt-20 m-auto items-start justify-center gap-40">
+                <label className="cursor-pointer label p-0">
+                    <input onInput={(e) => { neg(e) }} type="checkbox" className="checkbox checkbox-info  border-4" />
+                    <span className="label-text text-gray-500 font-semibold text-xl pl-10">Negative Marking <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
+                </label>
+                <span>
+                    <span className="cursor-pointer label flex items-center p-0 mb-5">
+                        <input onInput={(e) => { fetchRoom(e) }} type="checkbox" className="checkbox checkbox-info  border-4" />
+                        <span className="label-text text-gray-500 font-semibold text-xl pl-10">Copy question from another room <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
+                    </span>
+                    <input onInput={(e) => setRoomCode(e.target.value)} className='h-10 input border-2  border-cyan-700 animate__animated animate__slideInLeft' type="text" placeholder='room code' />
+                </span>
+
+            </div> */}
+
+
+
+            <div className='button-wrapper pt-32 animate__animated animate__fadeInUp'>
+                <button onClick={() => test()} className='button-custom bg-gradient-to-tr from-indigo-800 via-cyan-500 to-indigo-800 btn  text-white px-16 hover:bg-indigo-700 border-none hover:tracking-widest transition-all shadow-xl'>Create Question &nbsp;&nbsp;&rarr;</button>
             </div>
         </div>
     );
@@ -115,16 +333,3 @@ const Room = () => {
 
 export default Room;
 
-
-
-{/* <div className="content w-full md:w-1/3 flex
-
-                flex-col gap-10 lg:gap-20">
-
-                    <div className='text-start flex items-center justify-between'><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>Exam Date</label><input className='mt-2 input border-2  border-cyan-700' type="date" name="" id="" /></div>
-
-                    <div className='text-start flex items-center justify-between '><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>Starting time</label><input className='mt-2 input border-2 border-cyan-700' type="time" name="" id="" /></div>
-
-                    <div className='text-start flex items-center justify-between '><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>End time</label><input className='mt-2 input border-2 border-cyan-700' type="time" name="" id="" /></div>
-
-                </div> */}
