@@ -29,7 +29,7 @@ const Orders = () => {
       </div>
       <div className='min-w-[18rem]'></div>
 
-      <div className="  m-2 md:m-10 mt-20 p-2 md:p-10 bg-blue rounded-3xl w-full">
+      <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-xl w-full shadow-2xl min-h-[770px]">
         <Header category="Page" title="Courses" />
         <GridComponent
           id="gridcomp"

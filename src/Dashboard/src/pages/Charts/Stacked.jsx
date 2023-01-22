@@ -8,7 +8,7 @@ const Stacked = () => (
       <Sidebar />
     </div>
     <div className='min-w-[18rem]'></div>
-    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl w-full">
+    <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-xl w-full shadow-2xl min-h-[770px]">
       <ChartsHeader category="Stacked" title="Semester Report Analysis" />
       <StackedChart />
     </div>

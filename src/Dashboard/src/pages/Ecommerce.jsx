@@ -31,6 +31,7 @@ const Ecommerce = () => {
 
       {
         data ? <div className="flex flex-col flex-wrap lg:flex-nowrap justify-center animate__animated animate__fadeIn w-2/3 m-auto ">
+
           <div className=" bg-white flex flex-col items-start shadow-2xl dark:text-gray-200 dark:bg-secondary-dark-bg h-52 rounded-xl w-full p-8 pt-9 mb-10 bg-hero-pattern bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-start w-full">
               <div>
@@ -51,7 +52,7 @@ const Ecommerce = () => {
                 bgColor={currentColor}
                 text="Download"
                 borderRadius="10px"
-                
+
               />
             </div>
           </div>
@@ -59,12 +60,12 @@ const Ecommerce = () => {
 
 
 
-          <div className="flex flex-wrap justify-between items-center">
+          <div className="flex flex-wrap justify-between items-center pt-10">
             {earningData.map((item) => (
               <div
-                data-theme="winter"
+                data-theme="corporate"
                 key={item.title}
-                className="shadow-2xl h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl "
+                className="shadow-2xl h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl animate__animated animate__slideInUp"
               >
                 <button
                   type="button"
