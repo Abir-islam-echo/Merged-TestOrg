@@ -20,9 +20,15 @@ const DropDown = ({ currentMode }) => (
 
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
-  const { data } = FetchData()
-  if (data) {
+  
+  const { data } = FetchData()         //fetched data from dahsboard/src/hook/hook.js
+                                      // u can fetch data like this
+                                     // const { data, data1, data2, ........} = FetchData()
+
+  if (data) {    //to do any functionality check if the data is available else it will giv error
+    
     // code here
+
   }
 
 
@@ -31,7 +37,6 @@ const Ecommerce = () => {
 
       {
         data ? <div className="flex flex-col flex-wrap lg:flex-nowrap justify-center animate__animated animate__fadeIn w-2/3 m-auto ">
-
           <div className=" bg-white flex flex-col items-start shadow-2xl dark:text-gray-200 dark:bg-secondary-dark-bg h-52 rounded-xl w-full p-8 pt-9 mb-10 bg-hero-pattern bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-start w-full">
               <div>
@@ -56,8 +61,6 @@ const Ecommerce = () => {
               />
             </div>
           </div>
-
-
 
 
           <div className="flex flex-wrap justify-between items-center pt-10">
