@@ -138,17 +138,25 @@ const Mcq = (props) => {
                     </div>
                 </div>
                 <div className="mcq-question-content container py-1 flex flex-col gap-10 animate__animated animate__slideInRight animate__faster">
-                    <div className="question-and-marks flex py-2  gap-5 w-full items-center">
+                    <div className="question-and-marks flex py-2  gap-5 w-full items-start">
                         <span className=' text-3xl'>{`${index}.`}</span>
                         <div className="field-with-floating-label w-4/5">
-                            <input className={`w-full question rounded-md border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
+                            <input className={`text-lg font-semibold w-full question rounded-md border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
                         </div>
                         <div className="field-with-floating-label w-1/5">
-                            <input min="1" className={`marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
+                            <input min="1" className={`mb-5 marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
+                            <span className='text-start'>
+                                <p>category</p>
+                                <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
+                                    <option disabled selected>easy</option>
+                                    <option>hard</option>
+                                    <option>medium</option>
+                                </select>
+                            </span>
                         </div>
                     </div>
 
-                    <div className="left flex flex-col gap-2 radio-options lg:w-1/2 pl-[1px]">
+                    <div className="left flex flex-col gap-2 radio-options lg:w-1/2 pl-[30px] mt-[-80px]">
                         {
                             options.map((option, index) => {
                                 return <Option options={options} key={option.id} index={index + 1} id={option.id} deleteOption={deleteOption} setCorrectAnswer={setCorrectAnswer} optionCount={options.length} optionArray={optionArray} setOptionArray={setOptionArray} done={done}></Option>
@@ -165,7 +173,7 @@ const Mcq = (props) => {
                     }
                 </div>
                 {
-                    done ? <span className='py-3 px-6 mx-20 my-10'></span> : <input type="submit" className="cursor-pointer inline-block text-white btn bg-gray-500 hover:bg-gray-700 rounded-md py-3 px-6 mx-20 my-10 animate-pulse" value="done" />
+                    done ? <span className='py-3 px-6'></span> : <input type="submit" className="cursor-pointer inline-block text-white btn bg-gray-500 hover:bg-gray-700 rounded-md py-3 px-6 mx-20 mb-10 mt-20 animate-pulse" value="done" />
                 }
 
             </form>
@@ -204,7 +212,7 @@ const Option = (props) => {
                 <input onInput={(e) => setCorrectAnswer(e.target.value)} type="radio" name="radio" className={`radio-field radio border-2
                 
                  border-cyan-600 radio-accent ${done ? `pointer-events-none` : ``}`} value={id} />
-                <input onInput={(e) => inputValue(e.target.value)} className={`text-field animate__animated animate__slideInRight animate__faster rounded-md border-cyan-600  ${done ? `pointer-events-none` : ``}`} type="text" placeholder={`option ${index}`} />
+                <input onInput={(e) => inputValue(e.target.value)} className={`text-lg text-field animate__animated animate__slideInRight animate__faster rounded-md border-cyan-600  ${done ? `pointer-events-none` : ``}`} type="text" placeholder={`option ${index}`} />
                 {
                     (done || options.length <= 2) ? <div></div> : <span onClick={() => deleteOption(id)} className="delete-option transition-all hover:scale-105 " title='delete'>
                         <i class="fas fa-solid fa-trash-can text-orange-600 opacity-50 hover:opacity-100 hover:text-orange-600 transition-all"></i>

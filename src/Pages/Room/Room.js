@@ -250,7 +250,7 @@ const Room = () => {
 
                     <div className='text-start'><label htmlFor="input" className='text-2xl text-cyan-800 font-serif font-bold'>Course</label><input onInput={(e) => setCourseName(e.target.value)} className='mt-5 h-14 input border-2 border-cyan-700 animate__animated animate__slideInLeft' type="text" placeholder='course name' /></div>
 
-                    <div className="flex flex-col animate__animated animate__slideInLeft pt-20 items-start justify-center gap-8 mt-[-70px]">
+                    <div className="flex flex-col animate__animated animate__slideInLeft pt-4 items-start justify-center gap-8">
                         <label className="cursor-pointer label p-0">
                             <input onInput={(e) => { neg(e) }} type="checkbox" className="checkbox checkbox-info  border-2" />
                             <span className="label-text text-gray-500 font-semibold text-xl pl-6">Negative Marking <span className=" text-gray-400 font-light text-lg">(optional)</span></span>

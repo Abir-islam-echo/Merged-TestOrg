@@ -16,6 +16,7 @@ const Fill_gaps = (props) => {
             // let arr = [...questionFormData];
             // arr[index - 1] = data
             // setQuestionFormData(arr)
+            console.log(data)
             setQuestionFormData([...questionFormData, data])
             setDone(true)
             setIsValidQsn(true)
@@ -82,26 +83,34 @@ const Fill_gaps = (props) => {
                     </div>
                 </div>
                 <div className="mcq-question-content container py-1 flex flex-col gap-10 animate__animated animate__slideInRight animate__faster">
-                    <div className="question-and-marks flex py-2  gap-5 w-full items-center">
-                        <span className=' text-3xl'>{`${index}.`}</span>
+                    <div className="question-and-marks flex py-2  gap-5 w-full items-start">
+                        <span className=' text-3xl min-w-[25px]'>{`${index}.`}</span>
                         <div className="field-with-floating-label w-4/5">
-                            <input className={`w-full question rounded-md  border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
+                            <input className={`font-semibold text-lg w-full question rounded-md  border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
                         </div>
                         <div className="field-with-floating-label w-1/5">
-                            <input min="1" className={`marks rounded-md  border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
+                            <input min="1" className={`mb-5 marks rounded-md  border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
+                            <span className='text-start'>
+                                <p>category</p>
+                                <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
+                                    <option disabled selected>easy</option>
+                                    <option>hard</option>
+                                    <option>medium</option>
+                                </select>
+                            </span>
                         </div>
                     </div>
-                    <div className="radio-options max-w-xl flex flex-col gap-2 pl-[44px]">
+                    <div className="radio-options max-w-xl flex flex-col gap-2 pl-[42px] mt-[-80px]">
                         <div className="option-field">
                             {/* <div className="numbering ">
                                 <p>1.</p>
                             </div> */}
-                            <input className={`text-field text-xl rounded-md  border-cyan-600 ${done ? `pointer-events-none` : ``}`} type="text" placeholder='answer' {...register('correct_answer')} />
+                            <input className={`text-field text-lg rounded-md  border-cyan-600 ${done ? `pointer-events-none` : ``}`} type="text" placeholder='answer' {...register('correct_answer')} />
                         </div>
                     </div>
                 </div>
                 {
-                    done ? <span className='py-3 px-6 mx-20 my-10'></span> : <input type="submit" className="cursor-pointer inline-block text-white btn bg-gray-500 hover:bg-gray-700 rounded-md py-3 px-6 mx-20 my-10 animate-pulse" value="done" />
+                    done ? <span className='py-3 px-6 mx-20 my-10 '></span> : <input type="submit" className="cursor-pointer inline-block text-white btn bg-gray-500 hover:bg-gray-700 rounded-md py-3 px-6 mx-20 mb-10 mt-20 animate-pulse " value="done" />
                 }
             </form>
         </div>
