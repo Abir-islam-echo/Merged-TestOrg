@@ -13,7 +13,7 @@ const Header = () => {
     }
 
     return (
-        <div className='z-50 nb-custom w-full bg-gradient-to-r from-indigo-800 via-cyan-500 to-indigo-800 fixed top-0'>
+        <div className='z-50 nb-custom w-full bg-gradient-to-r from-indigo-800 via-cyan-500 to-indigo-800 fixed top-0 '>
             <div className="navbar container m-auto w-full inset-x-0  nb-custom px-0">
                 <div class="dropdown">
                     <label tabindex="0" class="btn btn-ghost lg:hidden">

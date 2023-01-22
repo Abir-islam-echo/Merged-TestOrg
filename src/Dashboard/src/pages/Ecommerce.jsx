@@ -20,13 +20,13 @@ const DropDown = ({ currentMode }) => (
 
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
-  
+
   const { data } = FetchData()         //fetched data from dahsboard/src/hook/hook.js
-                                      // u can fetch data like this
-                                     // const { data, data1, data2, ........} = FetchData()
+  // u can fetch data like this
+  // const { data, data1, data2, ........} = FetchData()
 
   if (data) {    //to do any functionality check if the data is available else it will giv error
-    
+
     // code here
 
   }
@@ -45,16 +45,16 @@ const Ecommerce = () => {
               </div>
               <button
                 type="button"
-                style={{ backgroundColor: currentColor }}
-                className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
+                // style={{ backgroundColor: currentColor }}
+                className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full p-4 nb-custom bg-gradient-to-tr from-indigo-700 via-cyan-500 to-indigo-700"
               >
                 <FiDownload />
               </button>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 nb-custom bg-gradient-to-tr from-indigo-700 via-cyan-500 to-indigo-700 rounded-md hover:drop-shadow-lg">
               <Button
                 color="white"
-                bgColor={currentColor}
+                // bgColor={currentColor}
                 text="Download"
                 borderRadius="10px"
 
