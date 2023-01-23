@@ -6,7 +6,7 @@ import useLogin from '../../../Hooks/useLogin';
 const Fill_gaps = (props) => {
     const [cross, setCross] = useState(true)
     const [done, setDone] = useState(false)
-    const { q_id, setQuestionFormData, questionFormData, deleteQuestion, index, setIsValidQsn, totalMarks, setTotalMarks, addQuestion, questionForm, setQuestionForm } = props
+    const { category, q_id, setQuestionFormData, questionFormData, deleteQuestion, index, setIsValidQsn, totalMarks, setTotalMarks, addQuestion, questionForm, setQuestionForm } = props
     const { register, handleSubmit } = useForm()
     const onSubmit = (data) => {
         if ((data.correct_answer) && (data.question) && (data.marks)) {
@@ -90,17 +90,19 @@ const Fill_gaps = (props) => {
                         </div>
                         <div className="field-with-floating-label w-1/5">
                             <input min="1" className={`mb-5 marks rounded-md  border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
-                            <span className='text-start'>
-                                <p>category</p>
-                                <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
-                                    <option disabled selected>easy</option>
-                                    <option>hard</option>
-                                    <option>medium</option>
-                                </select>
-                            </span>
+                            {
+                                category && <span className='text-start'>
+                                    <p>category</p>
+                                    <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
+                                        <option selected>easy</option>
+                                        <option>hard</option>
+                                        <option>medium</option>
+                                    </select>
+                                </span>
+                            }
                         </div>
                     </div>
-                    <div className="radio-options max-w-xl flex flex-col gap-2 pl-[42px] mt-[-80px]">
+                    <div className={`radio-options max-w-xl flex flex-col gap-2 pl-[42px] ${category && 'mt-[-80px]'}`}>
                         <div className="option-field">
                             {/* <div className="numbering ">
                                 <p>1.</p>

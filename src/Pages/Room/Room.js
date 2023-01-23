@@ -29,8 +29,18 @@ const Room = () => {
     const [teacherName, setTeacherName] = useState(null);
     const [markingType, setMarkingType] = useState(false);
     const [copyQuestion, setCopyQuestion] = useState(false);
+    const [category, setcategory] = useState(false);
     const [roomCode, setRoomCode] = useState(null);
     const navigate = useNavigate()
+
+    const categorySelect = (e) => {
+        if (e.target.checked)
+            setcategory(true)
+        else
+            setcategory(false)
+    }
+
+
     const fetchRoom = (e) => {
         if (e.target.checked)
             setCopyQuestion(true)
@@ -44,8 +54,11 @@ const Room = () => {
         else
             setMarkingType(false)
     }
-    const test = () => {
 
+
+
+
+    const test = () => {
 
         if (copyQuestion || roomCode) {
             if (roomCode && copyQuestion) {
@@ -63,26 +76,24 @@ const Room = () => {
                         }
                     })
                     const sendRoom = async () => {
-                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-room`, { token: validUser.token, roomID: roomCode })
+                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/get-question`, { roomID: roomCode })
                             .then(response => {
                                 // console.log(response.data.questions);
-
-                                const getRandom = (array) => {
-                                    let ranNums = [],
-                                        length = array.length,
-                                        index = 0;
-                                    while (length--) {
-                                        index = Math.floor(Math.random() * (length + 1));
-                                        if (array[index]?.question_type === 'mcq') {
-                                            array[index].options = getRandom(array[index].options)
-                                        }
-                                        ranNums.push(array[index]);
-                                        array.splice(index, 1);
-                                    }
-                                    return ranNums;
-                                }
-                                const question = getRandom(response.data.questions)
-                                // navigate('/Student/Exam', { state: { room: room, questions: question } })
+                                // const getRandom = (array) => {
+                                //     let ranNums = [],
+                                //         length = array.length,
+                                //         index = 0;
+                                //     while (length--) {
+                                //         index = Math.floor(Math.random() * (length + 1));
+                                //         if (array[index]?.question_type === 'mcq') {
+                                //             array[index].options = getRandom(array[index].options)
+                                //         }
+                                //         ranNums.push(array[index]);
+                                //         array.splice(index, 1);
+                                //     }
+                                //     return ranNums;
+                                // }
+                                const question = response.data.questions
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Question copied successfully',
@@ -111,22 +122,47 @@ const Room = () => {
                                             };
                                             const newStartTime = getInGlobalFormat(date?.$d?.toDateString(), startTime?.$d?.toLocaleTimeString());
                                             const newEndTime = getInGlobalFormat(date?.$d?.toDateString(), endTime?.$d?.toLocaleTimeString());
-                                            const room = {
-                                                token: validUser?.token,
-                                                startTime: newStartTime,
-                                                endTime: newEndTime,
-                                                courseName: courseName,
-                                                teacherName: teacherName ? teacherName : validUser?.userName,
-                                                totalMarks: response.data.totalMarks,
-                                                negMarks: markingType,
-                                                createdAt: new Date(),
-                                                questions: question
+                                            let newroom;
+                                            if (response.data.category == true) {
+                                                newroom = {
+                                                    token: validUser?.token,
+                                                    startTime: newStartTime,
+                                                    endTime: newEndTime,
+                                                    courseName: courseName,
+                                                    teacherName: teacherName ? teacherName : validUser?.userName,
+                                                    totalMarks: response.data.totalMarks,
+                                                    negMarks: markingType,
+                                                    createdAt: new Date(),
+                                                    questions: question,
+                                                    category: true,
+                                                    easyType: response.data.easyType,
+                                                    hardType: response.data.hardType,
+                                                    mediumType: response.data.mediumType,
+
+                                                }
+
                                             }
+                                            else {
+                                                newroom = {
+                                                    token: validUser?.token,
+                                                    startTime: newStartTime,
+                                                    endTime: newEndTime,
+                                                    courseName: courseName,
+                                                    teacherName: teacherName ? teacherName : validUser?.userName,
+                                                    totalMarks: response.data.totalMarks,
+                                                    negMarks: markingType,
+                                                    createdAt: new Date(),
+                                                    questions: question
+
+                                                }
+
+                                            }
+
                                             // console.log('room', room)
 
-                                            async function sendData(room) {
+                                            async function sendData(newroom) {
                                                 // console.log('called')
-                                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/add-room`, room)
+                                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/add-room`, newroom)
                                                     .then(response => {
                                                         // setGetRoomCode(response.data.roomCode)
                                                         console.log('after adding room', response)
@@ -182,7 +218,7 @@ const Room = () => {
                                                         })
                                                     })
                                             }
-                                            sendData(room)
+                                            sendData(newroom)
 
                                             localStorage.setItem('question', JSON.stringify(question))
                                         }
@@ -219,12 +255,8 @@ const Room = () => {
         }
 
 
-
-
-
-
         else if (date && startTime && endTime && courseName && (teacherName || validUser?.userName)) {
-            navigate('/Form_test', { state: { date: date, startTime: startTime, endTime: endTime, courseName: courseName, teacherName: teacherName ? teacherName : validUser?.userName, markingType: markingType } });
+            navigate('/Form_test', { state: { date: date, startTime: startTime, endTime: endTime, courseName: courseName, teacherName: teacherName ? teacherName : validUser?.userName, markingType: markingType, category: category } });
         }
         else {
             Swal.fire({
@@ -302,6 +334,10 @@ const Room = () => {
 
                         </Stack>
                     </LocalizationProvider>
+                    <label className="cursor-pointer label px-0 pt-10 animate__animated animate__slideInLeft flex items-center justify-start">
+                        <input onInput={(e) => { categorySelect(e) }} type="checkbox" className="checkbox checkbox-info border-2" />
+                        <span className="label-text text-gray-500 font-semibold text-xl pl-6">Category based question <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
+                    </label>
                 </div>
             </div>
 

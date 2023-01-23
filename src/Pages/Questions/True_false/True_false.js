@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 const True_false = (props) => {
     const [cross, setCross] = useState(true)
     const [done, setDone] = useState(false)
-    const { q_id, setQuestionFormData, questionFormData, deleteQuestion, index, setIsValidQsn, totalMarks, setTotalMarks, addQuestion, questionForm, setQuestionForm } = props
+    const { category, q_id, setQuestionFormData, questionFormData, deleteQuestion, index, setIsValidQsn, totalMarks, setTotalMarks, addQuestion, questionForm, setQuestionForm } = props
     const { register, handleSubmit } = useForm();
 
     const onSubmit = (data) => {
@@ -91,23 +91,25 @@ const True_false = (props) => {
                 </div>
                 <div className="mcq-question-content container py-1 flex flex-col gap-10 animate__animated animate__slideInRight animate__faster">
                     <div className="question-and-marks flex py-2  gap-5 w-full items-start ">
-                        <span className=' text-3xl'>{`${index}.`}</span>
+                        <span className='text-3xl min-w-[20px]'>{`${index}.`}</span>
                         <div className="field-with-floating-label w-4/5 ">
                             <input className={`text-xl font-semibold w-full question rounded-md border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
                         </div>
                         <div className="field-with-floating-label w-1/5">
                             <input min="1" className={`mb-5 marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
-                            <span className='text-start'>
-                                <p>category</p>
-                                <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
-                                    <option disabled selected>easy</option>
-                                    <option>hard</option>
-                                    <option>medium</option>
-                                </select>
-                            </span>
+                            {
+                                category && <span className='text-start'>
+                                    <p>category</p>
+                                    <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
+                                        <option selected>easy</option>
+                                        <option>hard</option>
+                                        <option>medium</option>
+                                    </select>
+                                </span>
+                            }
                         </div>
                     </div>
-                    <div className="radio-options max-w-xl flex flex-col gap-2 px-10 mt-[-80px]">
+                    <div className={`radio-options max-w-xl flex flex-col gap-2 px-10 ${category && 'mt-[-80px]'}`}>
                         <div className="option-field">
                             {/* <div className="numbering ">
                                 <p>1.</p>
