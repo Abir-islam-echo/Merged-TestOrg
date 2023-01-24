@@ -16,6 +16,7 @@ import { set } from 'date-fns';
 import { Checkbox } from 'react-miui';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Data } from '@syncfusion/ej2/grids';
 
 
 const Room = () => {
@@ -310,6 +311,7 @@ const Room = () => {
                                 onChange={(newValue) => {
                                     setDate(newValue);
                                 }}
+                                disablePast
                                 renderInput={(params) => <TextField {...params} />}
                                 className='animate__animated animate__slideInRight'
                             />
@@ -318,6 +320,20 @@ const Room = () => {
                                 value={startTime}
                                 onChange={(newValue) => {
                                     setStartTime(newValue);
+                                    // let crnt = new Data().getTime()
+                                    // let nv = newValue.$d
+                                    // console.log(newValue.$d.getTime())
+                                    // if (newValue.$d.getTime() < new Data().getTime()) {
+                                    //     console.log('error')
+                                    //     Swal.fire({
+                                    //         icon: 'error'
+                                    //     })
+                                    // }
+                                    // else {
+                                    //     setStartTime(newValue);
+                                    // }
+
+
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
                                 className='animate__animated animate__slideInRight'

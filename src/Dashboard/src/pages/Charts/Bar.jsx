@@ -5,9 +5,12 @@ import { barCustomSeries, barPrimaryXAxis, barPrimaryYAxis } from '../../data/du
 import { ChartsHeader, Sidebar } from '../../components';
 import { useStateContext } from '../../contexts/ContextProvider';
 import useAuth from '../../../../Hooks/useAuth';
+import FetchData from '../../Hook/fetchData';
+import Loader from '../../../../Loader/Loader';
 
 const Bar = () => {
   const { currentMode } = useStateContext();
+  const { barData } = FetchData()
 
   return (
     <div className='c-mt flex mb-52'>
@@ -29,12 +32,13 @@ const Bar = () => {
           <Inject
             services={[ColumnSeries, Legend, Tooltip, Category, DataLabel]}
           />
-          <SeriesCollectionDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {barCustomSeries.map((item, index) => (
-              <SeriesDirective key={index} {...item} />
-            ))}
-          </SeriesCollectionDirective>
+          {
+            barData ? <SeriesCollectionDirective>
+              {barData.map((item, index) => (
+                <SeriesDirective key={index} {...item} />
+              ))}
+            </SeriesCollectionDirective> : <span className='flex flex-col pt-64 gap-10'><Loader></Loader><p>Please wait...</p></span>
+          }
         </ChartComponent>
       </div>
     </div>

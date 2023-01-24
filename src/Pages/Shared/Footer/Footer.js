@@ -8,7 +8,7 @@ const Footer = () => {
     const targetNode = document.querySelector('body');
     const config = { childList: true, subtree: true };
     const callback = (mutationList, observer) => {
-        const string = "/Dash/dash/ecommerce/orders/employees/customers/line/bar/pie/stacked/calendar/kanban/editor"
+        const string = "/Dash/dash/ecommerce/orders/employees/customers/line/bar/pie/stacked/calendar/kanban/editor/Form_test/form_test"
         if (window.location.pathname == '/') {
             setFooter(true)
         }

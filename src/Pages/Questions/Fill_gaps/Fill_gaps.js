@@ -16,12 +16,12 @@ const Fill_gaps = (props) => {
             // let arr = [...questionFormData];
             // arr[index - 1] = data
             // setQuestionFormData(arr)
-            console.log(data)
             setQuestionFormData([...questionFormData, data])
             setDone(true)
             setIsValidQsn(true)
             setTotalMarks(totalMarks + parseInt(data.marks))
             setCross(false)
+
         }
         else {
             toast.error('fill up the empty fields', {

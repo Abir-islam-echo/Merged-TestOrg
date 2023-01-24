@@ -44,33 +44,6 @@ import {
 } from "../src/Dashboard/src/pages";
 
 function App() {
-console.log('asdvarsf efer gf')
-  const [firstTime, setFirstTime] = useState(true)
-  const [footer, setFooter] = useState(true)
-  // console.log(window.location)
-  window.addEventListener('onDomChange', () => {
-    alert("The Times They Are a-Changin'");
-  })
-  // onDomChange(function () {
-  //     alert("The Times They Are a-Changin'");
-  // });
-
-  useEffect(() => {
-    console.log('ada')
-    const string = "/Dash/ecommerce"
-    if (firstTime) {
-      if (string.includes(window.location.pathname.replace('/', ''))) {
-        setFooter(false)
-        setFirstTime(false)
-        console.log('yes')
-      }
-      else {
-        setFirstTime(false)
-        setFooter(true)
-      }
-
-    }
-  }, [window.location]);
 
   return (
     <div className="App bg-gray-100">
