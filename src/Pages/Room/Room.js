@@ -34,6 +34,7 @@ const Room = () => {
     const [roomCode, setRoomCode] = useState(null);
     const navigate = useNavigate()
 
+
     const categorySelect = (e) => {
         if (e.target.checked)
             setcategory(true)
@@ -266,14 +267,7 @@ const Room = () => {
             })
         }
     }
-    // console.log('start time', startTime)
-    // console.log('date', date)
-    // console.log('end time', endTime)
-    // console.log('remaining time', endTime - startTime)
-    // toDateString() -->'Thu Dec 01 2022'
-    // toLocaleDateString() -->'12/1/2022'
-    // toLocaleTimeString() -->'2:00:00 AM'
-    // getTime() -->'2:00:00 AM' -->1672344000757 mseconds
+
     return (
         <div className='container min-h-screen c-mt m-auto'>
             <div className="flex md:flex-row justify-around gap-10 md:pt-16 flex-col items-start">
@@ -316,29 +310,33 @@ const Room = () => {
                                 className='animate__animated animate__slideInRight'
                             />
                             <TimePicker
+                                minTime={dayjs().set('hour', new Date().getHours()).startOf('hour')}
                                 label="Start Time"
                                 value={startTime}
                                 onChange={(newValue) => {
                                     setStartTime(newValue);
-                                    // let crnt = new Data().getTime()
-                                    // let nv = newValue.$d
-                                    // console.log(newValue.$d.getTime())
-                                    // if (newValue.$d.getTime() < new Data().getTime()) {
-                                    //     console.log('error')
-                                    //     Swal.fire({
-                                    //         icon: 'error'
-                                    //     })
-                                    // }
-                                    // else {
-                                    //     setStartTime(newValue);
-                                    // }
-
-
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
                                 className='animate__animated animate__slideInRight'
                             />
-                            <TimePicker
+                            <div className={`w-full ${!startTime && 'tooltip tooltip-open tooltip-bottom tooltip-accent'} animate__animated animate__slideInRight `} data-tip={!startTime && 'you have to selet start time first'}>
+                                <TimePicker
+                                    disabled={!startTime}
+                                    minTime={dayjs().set('hour', startTime && startTime.$d.getHours()).startOf('hour')}
+                                    label="End Time"
+                                    value={endTime}
+                                    onChange={(newValue) => {
+                                        setEndTime(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    className='w-full'
+                                />
+
+                            </div>
+                            {/* <TimePicker
+                                title={!startTime && 'you need a'}
+                                disabled={!startTime}
+                                minTime={dayjs().set('hour', startTime && startTime.$d.getHours()).startOf('hour')}
                                 label="End Time"
                                 value={endTime}
                                 onChange={(newValue) => {
@@ -346,11 +344,11 @@ const Room = () => {
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
                                 className='animate__animated animate__slideInRight'
-                            />
+                            /> */}
 
                         </Stack>
                     </LocalizationProvider>
-                    <label className="cursor-pointer label px-0 pt-10 animate__animated animate__slideInLeft flex items-center justify-start">
+                    <label className="cursor-pointer label px-0 pt-14 animate__animated animate__slideInLeft flex items-center justify-start">
                         <input onInput={(e) => { categorySelect(e) }} type="checkbox" className="checkbox checkbox-info border-2" />
                         <span className="label-text text-gray-500 font-semibold text-xl pl-6">Category based question <span className=" text-gray-400 font-light text-lg">(optional)</span></span>
                     </label>
