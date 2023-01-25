@@ -13,6 +13,9 @@ import True_false from '../Pages/Questions/True_false/True_false';
 import { Check } from '@mui/icons-material';
 
 const Form_test = () => {
+    const [easyMarks, setEasyMarks] = useState(1)
+    const [mediumMarks, setMediumMarks] = useState(2)
+    const [hardMarks, setHardMarks] = useState(3)
 
     let b;
     const navigate = useNavigate()
@@ -36,7 +39,7 @@ const Form_test = () => {
     const { state } = useLocation();
     const { date, startTime, endTime, teacherName, courseName, markingType, category } = state;
 
-    const chekCetagory = () => {
+    const checkCategory = () => {
         let ecount = 0
         let mcount = 0
         let hcount = 0
@@ -114,7 +117,9 @@ const Form_test = () => {
         const filterForMarks = questionFormData.filter((question) => {
             return question.q_id === id;
         })
-        setTotalMarks(totalMarks - parseInt(filterForMarks[0].marks));
+        if (!category) {
+            setTotalMarks(totalMarks - parseInt(filterForMarks[0].marks));
+        }
         // console.log("total marks", totalMarks);
 
 
@@ -132,9 +137,15 @@ const Form_test = () => {
         // console.log("form data", filterForData);
     }
 
-    useEffect(() => {
 
-    }, [validUser]);
+    useEffect(() => {
+        if (category) {
+            checkCategory()
+            let cmarks = ((easyCount.length) * easyMarks) + (((mediumCount.length)) * mediumMarks) + ((hardCount.length) * hardMarks)
+            setTotalMarks(cmarks)
+        }
+    }, [questionFormData, questionForm, easyMarks, mediumMarks, hardMarks, isValidQsn]);
+
 
 
 
@@ -168,7 +179,11 @@ const Form_test = () => {
                 category: category,
                 easyType: parseInt(fromEasy),
                 mediumType: parseInt(fromMedium),
-                hardType: parseInt(fromHard)
+                hardType: parseInt(fromHard),
+                easyMarks: easyMarks,
+                mediumMarks: mediumMarks,
+                hardMarks: hardMarks,
+                totalMarksOfExam: ((parseInt(fromEasy)) * easyMarks) + (((parseInt(fromMedium))) * mediumMarks) + ((parseInt(fromHard)) * hardMarks)
 
             }
             // console.log(room)
@@ -252,28 +267,33 @@ const Form_test = () => {
     const categoryEnable = () => {
         setIsCategory(true)
         setIsValidQsn(false)
-        chekCetagory()
+        checkCategory()
+        let cmarks = ((easyCount.length) * easyMarks) + (((mediumCount.length)) * mediumMarks) + ((hardCount.length) * hardMarks)
+        setTotalMarks(cmarks)
         Swal.fire({
             width: '60vw',
             title: 'questions saved',
-            text: 'please select the number of questions from category section',
+            text: 'please select the number of questions from category section and add question marks for each category',
             showCancelButton: true,
             confirmButtonText: 'Ok',
             cancelButtonText: 'cancel',
-            icon: 'warning',
+            icon: 'success',
 
         })
             .then(result => {
                 if (result.isConfirmed) {
                     setIsCategory(true)
                     setIsValidQsn(false)
-                    // chekCetagory()
+                    checkCategory()
+
                 }
                 else {
                     setIsCategory(false)
                     setIsValidQsn(true)
+                    checkCategory()
                 }
             })
+
     }
 
 
@@ -320,7 +340,11 @@ const Form_test = () => {
                         category: category,
                         easyType: questionFormData.length,
                         mediumType: 0,
-                        hardType: 0
+                        hardType: 0,
+                        easyMarks: 0,
+                        mediumMarks: 0,
+                        hardMarks: 0,
+                        totalMarksOfExam: 0
                     }
                     // console.log(room)
 
@@ -396,14 +420,15 @@ const Form_test = () => {
 
 
     return (
-        <div className='m-auto mb-20 c-mt py-5 min-h-screen container relative'>
+        <div className='m-auto mb-20 c-mt pb-10 min-h-screen container relative'>
             {
-                category && <div className=' min-w-[18rem] min-h-screen category-base fixed right-0 top-16 p-5 z-20 bg-white  border-black  shadow-2xl rounded-md'>
+                category && <div className='animate__animated animate__slideInDown min-w-[18rem] min-h-screen category-base fixed right-0 top-16 p-5 z-20 bg-white  border-black  shadow-2xl rounded-md'>
                     <div className='flex flex-col gap-10 w-56'>
                         <p>you can select category after saving question</p>
                         <span className='text-start'>
                             <p>easy</p>
-                            <select disabled={!isCategory} onChange={(e) => { setFromEasy(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1 outline-none pointer-events-no`}>
+                            {/* disabled={!isCategory} */}
+                            <select onChange={(e) => { setFromEasy(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1 outline-none pointer-events-no`}>
                                 <option disabled selected>Number of questions</option>
                                 {
                                     easyCount.map((value, index) => {
@@ -416,7 +441,8 @@ const Form_test = () => {
                         </span>
                         <span className='text-start'>
                             <p>medium</p>
-                            <select disabled={!isCategory} onChange={(e) => { setFromMedium(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none `}>
+                            {/* disabled={!isCategory} */}
+                            <select onChange={(e) => { setFromMedium(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none `}>
                                 <option disabled selected>Number of questions</option>
                                 {
                                     mediumCount.map((value, index) => {
@@ -429,7 +455,8 @@ const Form_test = () => {
                         </span>
                         <span className='text-start'>
                             <p>hard</p>
-                            <select disabled={!isCategory} onChange={(e) => { setFromHard(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none }`}>
+                            {/* disabled={!isCategory} */}
+                            <select onChange={(e) => { setFromHard(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none }`}>
                                 <option disabled selected>Number of questions</option>
                                 {
                                     hardCount.map((value, index) => {
@@ -442,11 +469,11 @@ const Form_test = () => {
                         </span>
                         <span>
                             <p className='text-lg text-gray-600'>
-                                total <span className='font-semibold'>{parseInt(fromEasy) + parseInt(fromMedium) + parseInt(fromHard)}</span> questions will be showed randomly to each student
+                                total <span className='font-bold'>{parseInt(fromEasy) + parseInt(fromMedium) + parseInt(fromHard)}</span> questions with <span className='font-bold'>{((parseInt(fromEasy)) * easyMarks) + (((parseInt(fromMedium))) * mediumMarks) + ((parseInt(fromHard)) * hardMarks)}</span> marks of exam will be showed randomly to each student
                             </p>
                         </span>
                     </div>
-                    <div className='pt-[230px] px-2'>
+                    <div className='pt-[200px] px-2'>
                         {
                             isCategory ? <button title='finalize' className='w-full hover:bg-green-600 button-custom bg-gradient-to-tr from-green-800 via-green-600 to-green-800 text-white font-bold py-5 rounded text-xl button-custom transition-all' onClick={() => finalizeExam()}>Finalize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-check"></i></button> :
                                 <div>
@@ -467,8 +494,8 @@ const Form_test = () => {
 
 
 
-            <div className='rounded-2xl shadow-lg text-start z-40 w-[1196px] m-auto'>
-                <div className='z-40'>
+            <div className='text-start z-40 w-[1220px] m-auto fixed left-0 right-0 bg-gray-100 py-5'>
+                <div className='z-40 flex justify-between items-start'>
                     <div tabIndex={0} class="cursor-pointer dropdown animate__animated animate__slideInRight z-40">
                         <span className='shadow-inner rounded-2xl px-20 py-2 flex items-baseline gap-10 bg-gray-200 hover:bg-slate-300  hover:text-blue-600 hover:shadow-2xl transition-all'><h1 className='text-xl font-semibold'>Details</h1><i class="fas fa-duotone fa-circle-info"></i></span>
                         <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-40">
@@ -629,49 +656,61 @@ const Form_test = () => {
                             </div>
                         </div>
                     </div>
+                    {
+                        category && <div className='flex gap-10 animate__animated animate__slideInDown'>
+                            <span className='text-start w-[150px] drop-shadow-lg'>
+                                <p className='text-gray-500'>marks for easy</p>
+                                <select onChange={(e) => { setEasyMarks(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1 outline-none pointer-events-no`}>
+                                    <option selected>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </span>
+                            <span className='text-start  w-[150px] drop-shadow-lg'>
+                                <p className='text-gray-500'>marks for medium</p>
+                                <select onChange={(e) => { setMediumMarks(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1 outline-none pointer-events-no`}>
+                                    <option selected>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+
+                                </select>
+                            </span>
+                            <span className='text-start  w-[150px] drop-shadow-lg'>
+                                <p className='text-gray-500'>marks for hard</p>
+                                <select onChange={(e) => { setHardMarks(e.target.value) }} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1 outline-none pointer-events-no`}>
+                                    <option selected>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+
+                                </select>
+                            </span>
+                        </div>
+                    }
                 </div>
 
-                {/* <div className='border-2 border-cyan-700 px-5 py-2 bg-white flex-1 rounded-bl-lg'>
-                    <p className='text-gray-500 text-xl'>Exam Date</p>
-                    <p className='text-gray-700 text-lg'>{date.$d.toDateString()}</p>
-                </div>
-                <div className='border-2 border-cyan-700 px-5 py-2  bg-white flex-1'>
-                    <p className='text-gray-500 text-xl'>Start at</p>
-                    <p className='text-gray-700 text-lg'>{startTime.$d.toLocaleTimeString()}</p>
-                </div>
-                <div className='border-2 border-cyan-700 px-5 py-2 bg-white flex-1'>
-                    <p className='text-gray-500 text-xl'>End at</p>
-                    <p className='text-gray-700 text-lg'>{endTime.$d.toLocaleTimeString()}</p>
-                    
-                </div>
-                <div className='border-2 border-cyan-700 px-5 py-2  bg-white flex-1'>
-                    <p className='text-gray-500 text-xl'>Teacher</p>
-                    <p className='text-gray-700 text-lg'>{teacherName}</p>
-                </div>
-                <div className='border-2 border-cyan-700 px-5 py-2  bg-white flex-1 rounded-br-lg'>
-                    <p className='text-gray-500 text-xl'>Course</p>
-                    
-                </div> */}
             </div>
 
 
-            <div className="mb-72 container flex flex-col gap-10 m-auto justify-between min-h-screen animate__animated animate__fadeInUp animate__faster pt-10">
+            <div className="pt-36 mb-96 container flex flex-col gap-10 m-auto justify-between animate__animated animate__fadeInUp animate__faster ">
                 <div className="bottom flex flex-col lg:w-4/5 gap-20 w-full pb-40 m-auto">
                     {
                         questionForm.map((question, index) => {
                             if (question.value === 'mcq') {
                                 return (
-                                    <Mcq  category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion} ></Mcq>
+                                    <Mcq category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion} ></Mcq>
                                 )
                             }
                             else if (question.value === 'true-false') {
                                 return (
-                                    <True_false  category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion}></True_false>
+                                    <True_false category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion}></True_false>
                                 )
                             }
                             else if (question.value === 'fill-blanks') {
                                 return (
-                                    <Fill_gaps  category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion}  ></Fill_gaps>
+                                    <Fill_gaps category={category} setQuestionForm={setQuestionForm} questionForm={questionForm} index={index + 1} questionFormData={questionFormData} setQuestionFormData={setQuestionFormData} q_id={question.q_id} key={question.q_id + 1} deleteQuestion={deleteQuestion} setIsValidQsn={setIsValidQsn} totalMarks={totalMarks} setTotalMarks={setTotalMarks} addQuestion={addQuestion}  ></Fill_gaps>
                                 )
                             }
                         })
@@ -680,7 +719,7 @@ const Form_test = () => {
             </div>
 
 
-            <div className='fixed left-0 top-16 p-2 z-20 bg-white   shadow-2xl rounded-md min-h-screen min-w-[18rem]'>
+            <div className='animate__animated animate__slideInUp fixed left-0 top-16 p-2 z-20 bg-white   shadow-2xl rounded-md min-h-screen min-w-[18rem]'>
                 <div className='flex flex-col gap-10'>
                     <div className='px-6 py-3 rounded-lg bg-white shadow-lg flex flex-col justify-between'>
                         <p className='text-gray-500 text-lg'>Total questions</p>

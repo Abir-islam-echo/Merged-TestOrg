@@ -124,40 +124,24 @@ const Room = () => {
                                             };
                                             const newStartTime = getInGlobalFormat(date?.$d?.toDateString(), startTime?.$d?.toLocaleTimeString());
                                             const newEndTime = getInGlobalFormat(date?.$d?.toDateString(), endTime?.$d?.toLocaleTimeString());
-                                            let newroom;
-                                            if (response.data.category == true) {
-                                                newroom = {
-                                                    token: validUser?.token,
-                                                    startTime: newStartTime,
-                                                    endTime: newEndTime,
-                                                    courseName: courseName,
-                                                    teacherName: teacherName ? teacherName : validUser?.userName,
-                                                    totalMarks: response.data.totalMarks,
-                                                    negMarks: markingType,
-                                                    createdAt: new Date(),
-                                                    questions: question,
-                                                    category: true,
-                                                    easyType: response.data.easyType,
-                                                    hardType: response.data.hardType,
-                                                    mediumType: response.data.mediumType,
-
-                                                }
-
-                                            }
-                                            else {
-                                                newroom = {
-                                                    token: validUser?.token,
-                                                    startTime: newStartTime,
-                                                    endTime: newEndTime,
-                                                    courseName: courseName,
-                                                    teacherName: teacherName ? teacherName : validUser?.userName,
-                                                    totalMarks: response.data.totalMarks,
-                                                    negMarks: markingType,
-                                                    createdAt: new Date(),
-                                                    questions: question
-
-                                                }
-
+                                            const newroom = {
+                                                token: validUser?.token,
+                                                startTime: newStartTime,
+                                                endTime: newEndTime,
+                                                courseName: courseName,
+                                                teacherName: teacherName ? teacherName : validUser?.userName,
+                                                totalMarks: response.data.totalMarks,
+                                                negMarks: markingType,
+                                                createdAt: new Date(),
+                                                questions: question,
+                                                category: response.data.category,
+                                                easyType: response.data.easyType,
+                                                hardType: response.data.hardType,
+                                                mediumType: response.data.mediumType,
+                                                easyMarks: response.data.easyMarks,
+                                                mediumMarks: response.data.mediumMarks,
+                                                hardMarks: response.data.hardMarks,
+                                                totalMarksOfExam: response.data.totalMarksOfExam
                                             }
 
                                             // console.log('room', room)

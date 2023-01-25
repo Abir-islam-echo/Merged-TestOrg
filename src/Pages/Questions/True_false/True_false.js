@@ -9,7 +9,7 @@ const True_false = (props) => {
     const { register, handleSubmit } = useForm();
 
     const onSubmit = (data) => {
-        if ((data.question) && (data.marks)) {
+        if ((data.question) && (data.marks || category)) {
             if (data.correct_answer) {
                 data.options = ['true', 'false']
                 data.question_type = 'true-false'
@@ -17,7 +17,9 @@ const True_false = (props) => {
                 setQuestionFormData([...questionFormData, data])
                 setDone(true)
                 setIsValidQsn(true)
-                setTotalMarks(totalMarks + parseInt(data.marks))
+                if (!category) {
+                    setTotalMarks(totalMarks + parseInt(data.marks))
+                }
                 setCross(false)
             }
             else {
@@ -42,7 +44,9 @@ const True_false = (props) => {
         const index = questionFormData.filter(question => {
             return question.q_id == q_id
         })
-        setTotalMarks(totalMarks - parseInt(questionFormData[questionFormData.indexOf(index[0])].marks))
+        if (!category) {
+            setTotalMarks(totalMarks - parseInt(questionFormData[questionFormData.indexOf(index[0])].marks))
+        }
         questionFormData.splice(questionFormData.indexOf(index[0]), 1)
         setDone(false)
     }
@@ -96,20 +100,20 @@ const True_false = (props) => {
                             <input className={`text-xl font-semibold w-full question rounded-md border-cyan-600 p-2 py-3 form-check ${done ? `pointer-events-none` : ``}`} type="text" placeholder='Question here' {...register('question')} />
                         </div>
                         <div className="field-with-floating-label w-1/5">
-                            <input min="1" className={`mb-5 marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
                             {
-                                category && <span className='text-start'>
-                                    <p>category</p>
-                                    <select {...register('category')} data-theme='light' className={`select rounded-md border-cyan-600 select-bordered w-full max-w-xs mt-1  outline-none ${done ? `pointer-events-none` : ``}`}>
+                                category ? <span className=''>
+                                    <select {...register('category')} data-theme='light' className={`mb-1 select rounded-md border-cyan-600 select-bordered w-full max-w-xsoutline-none ${done ? `pointer-events-none` : ``}`}>
                                         <option selected>easy</option>
                                         <option>hard</option>
                                         <option>medium</option>
                                     </select>
-                                </span>
+                                    <p>category</p>
+                                </span> : <input min="1" className={`mb-5 marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />
                             }
+
                         </div>
                     </div>
-                    <div className={`radio-options max-w-xl flex flex-col gap-2 px-10 ${category && 'mt-[-80px]'}`}>
+                    <div className={`radio-options max-w-xl flex flex-col gap-2 px-10 `}>
                         <div className="option-field">
                             {/* <div className="numbering ">
                                 <p>1.</p>

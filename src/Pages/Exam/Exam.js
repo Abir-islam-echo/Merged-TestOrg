@@ -17,6 +17,9 @@ const Exam = () => {
     const [firstime, setFirstime] = useState(true);
     const [remainingTime, setRemainingTime] = useState();
     const [newQuestion, setNewQuestion] = useState([])
+    const [questions, setQuestions] = useState([])
+    const [newStudentAnswer, setNewStudentAnswer] = useState([])
+    console.log(newStudentAnswer)
 
     if (!useLocation().state) {
         Swal.fire({
@@ -29,14 +32,15 @@ const Exam = () => {
         })
     }
     const { state } = useLocation();
-    const { room, questions } = state;
+    const { room, question } = state;
 
     if (firstime) {
         setTimeout(() => {
-            setNewQuestion(oldArray => [...oldArray, questions[0]]);
+            setNewQuestion(oldArray => [...oldArray, question[0]]);
         }, 100)
 
         setTimeout(() => {
+            setQuestions(question)
             setRunning(true)
         }, 1000)
 
@@ -78,23 +82,25 @@ const Exam = () => {
             return questions.indexOf(question) === count
         });
         setNewQuestion(filtered_questions)
+        questions.shift()
+        console.log(questions)
 
-        if (count >= questions.length) {
+        // if (count >= questions.length) {
 
-            setIsFinished(true);
-            Swal.fire({
-                icon: 'success',
-                title: 'Good job!',
-                html: `<h1><b>You have answred ${answers.length} questions! out of ${questions.length}</b></h1>
-                <br>
-                <p className='animate-pulse'>You can find your result in your room</p>`,
-                confirmButtonText: 'Ok',
-            })
-            Swal.showLoading()
-            setTimeout(() => {
-                submitResult();
-            }, 3000)
-        }
+        //     setIsFinished(true);
+        //     Swal.fire({
+        //         icon: 'success',
+        //         title: 'Good job!',
+        //         html: `<h1><b>You have answred ${answers.length} questions! out of ${questions.length}</b></h1>
+        //         <br>
+        //         <p className='animate-pulse'>You can find your result in your room</p>`,
+        //         confirmButtonText: 'Ok',
+        //     })
+        //     Swal.showLoading()
+        //     setTimeout(() => {
+        //         submitResult();
+        //     }, 3000)
+        // }
     }
 
     const startTime = new Date(`${room.startTime}`).getTime();
@@ -283,17 +289,17 @@ const Exam = () => {
                                 newQuestion.map((element) => {
                                     if (element.question_type === 'true-false') {
                                         return (
-                                            <ShowTrue setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id} key={count}></ShowTrue>
+                                            <ShowTrue category={element.category} setNewStudentAnswer={setNewStudentAnswer} setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id} key={count}></ShowTrue>
                                         )
                                     }
                                     else if (element.question_type === 'mcq') {
                                         return (
-                                            <ShowQuiz key={count} setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} options={element.options} correct_answer={element.correct_answer} q_id={element.q_id}></ShowQuiz>
+                                            <ShowQuiz category={element.category} setNewStudentAnswer={setNewStudentAnswer} key={count} setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} options={element.options} correct_answer={element.correct_answer} q_id={element.q_id}></ShowQuiz>
                                         )
                                     }
                                     else if (element.question_type === 'fill-blanks') {
                                         return (
-                                            <ShowGaps key={count} setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id}></ShowGaps>
+                                            <ShowGaps category={element.category} setNewStudentAnswer={setNewStudentAnswer} key={count} setInput={setInput} answers={answers} setAnswers={setAnswers} index={count} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id}></ShowGaps>
                                         )
                                     }
 
@@ -324,7 +330,7 @@ export default Exam;
 
 
 const ShowQuiz = (props) => {
-    const { index, question, marks, options, setAnswers, answers, setInput, correct_answer, q_id } = props;
+    const { index, question, marks, options, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer,category } = props;
     const inputValue = (e) => {
         let arr = [...answers];
         arr[index - 1] = {
@@ -335,10 +341,19 @@ const ShowQuiz = (props) => {
         }
         setAnswers(arr)
         setInput(true)
-        // let arr = [...answers];
-        // arr[index - 1] = e
-        // setAnswers(arr)
-        // setInput(true)
+        const sta = {
+            "question": question,
+            "marks": marks,
+            "correct_answer": correct_answer,
+            "student_answer": e,
+            "options": [],
+            "question_type": "mcq",
+            "q_id": q_id,
+            "category": category
+        }
+
+        setNewStudentAnswer(sta)
+    
     }
 
     return (
@@ -390,12 +405,8 @@ const Option = (props) => {
 
 
 const ShowGaps = (props) => {
-    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id } = props;
+    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer, category } = props;
     const inputValue = (e) => {
-        // let arr = [...answers];
-        // arr[index - 1] = e
-        // setAnswers(arr);
-        // setInput(true)
         let arr = [...answers];
         arr[index - 1] = {
             q_id: q_id,
@@ -405,6 +416,18 @@ const ShowGaps = (props) => {
         }
         setAnswers(arr)
         setInput(true)
+        const sta = {
+            "question": question,
+            "marks": marks,
+            "correct_answer": correct_answer,
+            "student_answer": e,
+            "options": [],
+            "question_type": "fill-blanks",
+            "q_id": q_id,
+            "category": category
+        }
+  
+        setNewStudentAnswer(sta)
     }
 
     return (
@@ -438,12 +461,8 @@ const ShowGaps = (props) => {
 
 
 const ShowTrue = (props) => {
-    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id } = props;
+    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer,category } = props;
     const inputValue = (e) => {
-        // let arr = [...answers];
-        // arr[index - 1] = e
-        // setAnswers(arr);
-        // setInput(true)
 
         let arr = [...answers];
         arr[index - 1] = {
@@ -454,6 +473,19 @@ const ShowTrue = (props) => {
         }
         setAnswers(arr)
         setInput(true)
+        const sta = {
+            "question": question,
+            "marks": marks,
+            "correct_answer": correct_answer,
+            "student_answer": e,
+            "options": [],
+            "question_type": "true-false",
+            "q_id": q_id,
+            "category": category
+        }
+    
+        setNewStudentAnswer(sta)
+
     }
 
     return (
