@@ -57,11 +57,7 @@ const Room = () => {
             setMarkingType(false)
     }
 
-
-
-
     const test = () => {
-
         if (copyQuestion || roomCode) {
             if (roomCode && copyQuestion) {
                 if (date && startTime && endTime && courseName && (teacherName || validUser?.userName)) {
@@ -78,23 +74,8 @@ const Room = () => {
                         }
                     })
                     const sendRoom = async () => {
-                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/get-question`, { roomID: roomCode })
-                            .then(response => {
-                                // console.log(response.data.questions);
-                                // const getRandom = (array) => {
-                                //     let ranNums = [],
-                                //         length = array.length,
-                                //         index = 0;
-                                //     while (length--) {
-                                //         index = Math.floor(Math.random() * (length + 1));
-                                //         if (array[index]?.question_type === 'mcq') {
-                                //             array[index].options = getRandom(array[index].options)
-                                //         }
-                                //         ranNums.push(array[index]);
-                                //         array.splice(index, 1);
-                                //     }
-                                //     return ranNums;
-                                // }
+                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/roominfo`, { roomID: roomCode })
+                            .then(response => {                              
                                 const question = response.data.questions
                                 Swal.fire({
                                     icon: 'success',
@@ -181,7 +162,7 @@ const Room = () => {
                                                                         },
                                                                     }).then(() => {
                                                                         navigator.clipboard.writeText(b);
-                                                                        toast.success('Code copied', {
+                                                                        toast.success('code copied', {
                                                                             autoClose: 2000,
                                                                             toastId: 'customId',
                                                                             position: 'top-right',
@@ -205,7 +186,6 @@ const Room = () => {
                                                     })
                                             }
                                             sendData(newroom)
-
                                             localStorage.setItem('question', JSON.stringify(question))
                                         }
                                     })

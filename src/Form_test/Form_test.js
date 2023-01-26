@@ -720,16 +720,31 @@ const Form_test = () => {
 
 
             <div className='animate__animated animate__slideInUp fixed left-0 top-16 p-2 z-20 bg-white   shadow-2xl rounded-md min-h-screen min-w-[18rem]'>
-                <div className='flex flex-col gap-10'>
-                    <div className='px-6 py-3 rounded-lg bg-white shadow-lg flex flex-col justify-between'>
+                <div className='flex flex-col gap-8 mt-2'>
+                    <div className='px-5 py-3 rounded-lg bg-white shadow-lg flex  justify-between'>
                         <p className='text-gray-500 text-lg'>Total questions</p>
-                        <p className='text-gray-700 text-2xl py-2 font-semibold'>{questionFormData.length}</p>
+                        <p className='text-gray-700 text-2xl  font-semibold'>{questionFormData.length}</p>
                     </div>
-                    <div className='px-6 py-3 rounded-lg bg-white shadow-lg flex flex-col justify-between'>
+                    <div className='px-5 py-3 rounded-lg bg-white shadow-lg flex justify-between'>
                         <p className='text-gray-500 text-lg'>Total marks counted</p>
-                        <p className='text-gray-700 text-2xl py-2 font-semibold'>{totalMarks}</p>
+                        <p className='text-gray-700 text-2xl font-semibold'>{totalMarks}</p>
                     </div>
-
+                    {
+                        category && <div className='rounded-md overflow-hidden'>
+                            <div className='px-5 py-3 bg-white flex justify-between border-b-2 border-t-2'>
+                                <p className='text-gray-500 text-lg'>Total easy question</p>
+                                <p className='text-gray-700 text-xl font-semibold'>{easyCount.length}</p>
+                            </div>
+                            <div className='px-5 py-3  bg-white  flex justify-between border-b-2'>
+                                <p className='text-gray-500 text-lg'>Total medium question</p>
+                                <p className='text-gray-700 text-xl font-semibold'>{mediumCount.length}</p>
+                            </div>
+                            <div className='px-5 py-3 bg-white flex justify-between border-b-2'>
+                                <p className='text-gray-500 text-lg'>Total hard question</p>
+                                <p className='text-gray-700 text-xl font-semibold'>{hardCount.length}</p>
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <div className="flex flex-col flex-auto pt-[100px]">
@@ -743,7 +758,7 @@ const Form_test = () => {
 
                 <div>
                     {
-                        !category && <div className='pt-[230px] px-4'>
+                        !category && <div className='pt-[310px] px-4'>
                             {
                                 (questionForm.length >= 2) ? <button title='save' className='w-full hover:bg-green-600 button-custom bg-gradient-to-tr from-green-800 via-green-600 to-green-800 text-white font-bold py-5 px-4 rounded text-xl button-custom transition-all' onClick={() => saveData()}>save question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-duotone fa-floppy-disk" /></button> : <button title='you have to make at least 2 questions' className='w-full hover:bg-green-600 button-custom bg-gradient-to-tr from-green-800 via-green-600 to-green-800 text-white font-bold py-5 px-4 rounded text-xl button-custom  transition-all' onClick={() => Swal.fire({
                                     title: 'you have to make at least 2 questions',

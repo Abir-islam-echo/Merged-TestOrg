@@ -27,7 +27,13 @@ const ExamTimer = (props) => {
                 })
                 Swal.showLoading()
                 setTimeout(() => {
-                    submitResult();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Great!',
+                        text: 'Result submitted successfully',
+                    }).then(() => {
+                        navigate("/student")
+                    })
                 }, 3000)
                 setIsFinished(true);
             }

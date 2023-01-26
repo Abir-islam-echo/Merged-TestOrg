@@ -68,7 +68,7 @@ const SingleRoom = (props) => {
                         }
                     })
                     const sendDetails = async () => {
-                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-room`, { token: validUser.token, roomID: room.roomID })
+                        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/roominfo`, { token: validUser.token, roomID: room.roomID })
                             .then(response => {
                                 navigate('/examDetails', { state: { room: response.data } })
 
@@ -97,7 +97,7 @@ const SingleRoom = (props) => {
                 }).then((result) => {
                     if (result.isConfirmed) {
 
-                        if (!room.participated) {
+                        if (room.participated) {
                             Swal.fire({
                                 icon: "error",
                                 title: "access denied !!",
@@ -120,9 +120,9 @@ const SingleRoom = (props) => {
                                 }
                             })
                             const sendRoom = async () => {
-                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-room`, { token: validUser.token, roomID: room.roomID })
+                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-question`, { token: validUser.token, roomID: room.roomID })
                                     .then(response => {
-                                        // console.log(response.data.questions);
+                                        // console.log(response.data);
 
                                         const getRandom = (array) => {
                                             let ranNums = [],
@@ -139,7 +139,7 @@ const SingleRoom = (props) => {
                                             return ranNums;
                                         }
                                         const question = getRandom(response.data.questions)
-                                        navigate('/Student/Exam', { state: { room: room, question: question } })
+                                        navigate('/Student/Exam', { state: { room: response.data, question: question } })
                                     })
                                     .catch(error => {
                                         Swal.fire({
@@ -183,7 +183,7 @@ const SingleRoom = (props) => {
                                 }
                             })
                             const sendDetails = async () => {
-                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/view-room`, { token: validUser.token, roomID: room.roomID })
+                                await axios.post(`https://excited-foal-raincoat.cyclic.app/room/roominfo`, { token: validUser.token, roomID: room.roomID })
                                     .then(response => {
                                         // console.log(response.data)
                                         navigate('/examDetails', { state: { room: response.data, gotMarks: room.gotMarks } })

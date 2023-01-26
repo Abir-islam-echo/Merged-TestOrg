@@ -19,7 +19,6 @@ const Exam = () => {
     const [newQuestion, setNewQuestion] = useState([])
     const [questions, setQuestions] = useState([])
     const [newStudentAnswer, setNewStudentAnswer] = useState([])
-    console.log(newStudentAnswer)
 
     if (!useLocation().state) {
         Swal.fire({
@@ -54,20 +53,14 @@ const Exam = () => {
         const result = {
             token: validUser.token,
             negMarks: room.negMarks,
-            roomID: room.roomID,
-            studentAnswer: answers
+            roomID: room._id,
+            studentAnswer: newStudentAnswer
+            // studentAnswer: answers
         }
-        // console.log('result', result)
 
-        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/submit-result`, result)
+        await axios.post(`https://excited-foal-raincoat.cyclic.app/room/submit-ans`, result)
             .then((response) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Great!',
-                    text: 'Result submitted successfully',
-                }).then(() => {
-                    navigate("/student")
-                })
+
             })
             .catch((error) => {
                 console.log(error)
@@ -77,30 +70,33 @@ const Exam = () => {
     }
 
     const changeQuestion = () => {
+        submitResult()
 
         const filtered_questions = questions.filter((question) => {
             return questions.indexOf(question) === count
         });
         setNewQuestion(filtered_questions)
-        questions.shift()
-        console.log(questions)
 
-        // if (count >= questions.length) {
-
-        //     setIsFinished(true);
-        //     Swal.fire({
-        //         icon: 'success',
-        //         title: 'Good job!',
-        //         html: `<h1><b>You have answred ${answers.length} questions! out of ${questions.length}</b></h1>
-        //         <br>
-        //         <p className='animate-pulse'>You can find your result in your room</p>`,
-        //         confirmButtonText: 'Ok',
-        //     })
-        //     Swal.showLoading()
-        //     setTimeout(() => {
-        //         submitResult();
-        //     }, 3000)
-        // }
+        if (count >= questions.length) {
+            setIsFinished(true);
+            Swal.fire({
+                icon: 'success',
+                title: 'Good job!',
+                html: `<h1><b>You have answred ${answers.length} questions! out of ${questions.length}</b></h1>
+                <br>
+                <p className='animate-pulse'>You can find your result in your room</p>`,
+                confirmButtonText: 'Ok',
+            })
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Great!',
+                    text: 'Result submitted successfully',
+                }).then(() => {
+                    navigate("/student")
+                })
+            }, 3000)
+        }
     }
 
     const startTime = new Date(`${room.startTime}`).getTime();
@@ -204,7 +200,7 @@ const Exam = () => {
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><p className='text-gray-300 text-xl pr-20'>{room.CourseName}</p></td>
+                                            <td><p className='text-gray-300 text-xl pr-20'>{room.courseName}</p></td>
                                         </tr>
                                         <tr>
                                             <td className='text-2xl pl-10'>Marking type</td>
@@ -330,7 +326,7 @@ export default Exam;
 
 
 const ShowQuiz = (props) => {
-    const { index, question, marks, options, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer,category } = props;
+    const { index, question, marks, options, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer, category } = props;
     const inputValue = (e) => {
         let arr = [...answers];
         arr[index - 1] = {
@@ -342,18 +338,18 @@ const ShowQuiz = (props) => {
         setAnswers(arr)
         setInput(true)
         const sta = {
-            "question": question,
-            "marks": marks,
-            "correct_answer": correct_answer,
-            "student_answer": e,
-            "options": [],
-            "question_type": "mcq",
-            "q_id": q_id,
-            "category": category
+            question: question,
+            marks: marks,
+            correct_answer: correct_answer,
+            student_answer: e,
+            options: options,
+            question_type: "mcq",
+            q_id: q_id,
+            category: category
         }
 
         setNewStudentAnswer(sta)
-    
+
     }
 
     return (
@@ -394,16 +390,6 @@ const Option = (props) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 const ShowGaps = (props) => {
     const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer, category } = props;
     const inputValue = (e) => {
@@ -417,16 +403,16 @@ const ShowGaps = (props) => {
         setAnswers(arr)
         setInput(true)
         const sta = {
-            "question": question,
-            "marks": marks,
-            "correct_answer": correct_answer,
-            "student_answer": e,
-            "options": [],
-            "question_type": "fill-blanks",
-            "q_id": q_id,
-            "category": category
+            question: question,
+            marks: marks,
+            correct_answer: correct_answer,
+            student_answer: e,
+            options: [],
+            question_type: "fill-blanks",
+            q_id: q_id,
+            category: category
         }
-  
+
         setNewStudentAnswer(sta)
     }
 
@@ -450,18 +436,8 @@ const ShowGaps = (props) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 const ShowTrue = (props) => {
-    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer,category } = props;
+    const { index, question, marks, setAnswers, answers, setInput, correct_answer, q_id, setNewStudentAnswer, category } = props;
     const inputValue = (e) => {
 
         let arr = [...answers];
@@ -474,16 +450,16 @@ const ShowTrue = (props) => {
         setAnswers(arr)
         setInput(true)
         const sta = {
-            "question": question,
-            "marks": marks,
-            "correct_answer": correct_answer,
-            "student_answer": e,
-            "options": [],
-            "question_type": "true-false",
-            "q_id": q_id,
-            "category": category
+            question: question,
+            marks: marks,
+            correct_answer: correct_answer,
+            student_answer: e,
+            options: ["true", "false"],
+            question_type: "true-false",
+            q_id: q_id,
+            category: category
         }
-    
+
         setNewStudentAnswer(sta)
 
     }
