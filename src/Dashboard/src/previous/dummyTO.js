@@ -9,6 +9,24 @@ const fetchData = async () => {
 // api
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const CourseData = [
   {
     CourseName: "Computer Programming",
@@ -89,12 +107,12 @@ export const CourseGrid = [
     textAlign: "Center",
     width: "120",
   },
-  // {
-  //   field: "CourseCode",
-  //   headerText: "Course Code",
-  //   width: "150",
-  //   textAlign: "Center",
-  // },
+  {
+    field: "CourseCode",
+    headerText: "Course Code",
+    width: "150",
+    textAlign: "Center",
+  },
   {
     field: "RoomID",
     headerText: "ROOM ID",
@@ -108,12 +126,12 @@ export const CourseGrid = [
     editType: "dropdownedit",
     textAlign: "Center",
   },
-  // {
-  //   field: "TestTaken",
-  //   headerText: "TEST TAKEN",
-  //   width: "150",
-  //   textAlign: "Center",
-  // },
+  {
+    field: "TestTaken",
+    headerText: "TEST TAKEN",
+    width: "150",
+    textAlign: "Center",
+  },
 ];
 
 export const TotalTestGrid = [

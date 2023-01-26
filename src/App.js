@@ -22,6 +22,7 @@ import MyProfile from './Pages/MyProfile/MyProfile';
 import Confirmed from './Pages/Confirmed/Confirmed';
 import ExamDetails from './Pages/ExamDetails/ExamDetails';
 import Dash from './Dashboard/src/Dash';
+import Table from './Dashboard/src/components/PrintReport/table';
 import { ContextProvider } from "../src/Dashboard/src/contexts/ContextProvider";
 import {
   Ecommerce,
@@ -90,6 +91,7 @@ function App() {
               <Route path="/color-mapping" element={<ColorMapping />} />
               <Route path="/pyramid" element={<Pyramid />} />
               <Route path="/stacked" element={<Stacked />} />
+              <Route path="/print" element={<Table />} />
               {/* sk */}
             </Routes>
             <Footer />

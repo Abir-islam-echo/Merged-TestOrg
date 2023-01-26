@@ -11,6 +11,7 @@ import { useStateContext } from '../contexts/ContextProvider';
 import product9 from '../data/product9.jpg';
 import FetchData from '../Hook/fetchData';
 import Loader from '../../../Loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -31,6 +32,13 @@ const Ecommerce = () => {
 
   }
 
+  const navigate = useNavigate();
+  const handleDownload = () => {
+    console.log("clicked");
+    navigate("/print");
+
+  }
+
 
   return (
     <div className="mt-24">
@@ -44,6 +52,7 @@ const Ecommerce = () => {
                 <p className="text-2xl text-gray-900">Physics</p>
               </div>
               <button
+                onClick={() => { handleDownload() }}
                 type="button"
                 // style={{ backgroundColor: currentColor }}
                 className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full p-4 nb-custom bg-gradient-to-tr from-indigo-700 via-cyan-500 to-indigo-700"
@@ -51,14 +60,14 @@ const Ecommerce = () => {
                 <FiDownload />
               </button>
             </div>
-            <div className="mt-10 nb-custom bg-gradient-to-tr from-indigo-700 via-cyan-500 to-indigo-700 rounded-md hover:drop-shadow-lg">
-              <Button
+            <div onClick={() => { handleDownload() }} className="text-white border-none btn mt-10 nb-custom bg-gradient-to-tr from-indigo-700 via-cyan-500 to-indigo-700 rounded-md hover:drop-shadow-lg px-10">
+              <button
                 color="white"
                 // bgColor={currentColor}
                 text="Download"
                 borderRadius="10px"
 
-              />
+              >Download</button>
             </div>
           </div>
 
