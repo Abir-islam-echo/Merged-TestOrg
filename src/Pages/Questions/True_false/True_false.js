@@ -104,8 +104,9 @@ const True_false = (props) => {
                                 category ? <span className=''>
                                     <select {...register('category')} data-theme='light' className={`mb-1 select rounded-md border-cyan-600 select-bordered w-full max-w-xsoutline-none ${done ? `pointer-events-none` : ``}`}>
                                         <option selected>easy</option>
-                                        <option>hard</option>
                                         <option>medium</option>
+                                        <option>hard</option>
+
                                     </select>
                                     <p>category</p>
                                 </span> : <input min="1" className={`mb-5 marks rounded-md border-cyan-600 outline-0 p-2 py-3 w-full ${done ? `pointer-events-none` : ``}`} type="number" placeholder='marks here' {...register('marks')} />

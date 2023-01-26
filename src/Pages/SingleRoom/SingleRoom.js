@@ -253,7 +253,8 @@ const SingleRoom = (props) => {
                             <p className='text-start font-thin '>Exam duration : <span className='font-normal'>{examDays ? `${examDays} day` : ''} {examHours ? `${examHours} hour` : ''} {examMinutes ? `${examMinutes} minute` : ''}</span></p>
 
                             {
-                                (validUser.usertype == 'student' && getStatus(room).status == "ended") ? <p className='text-start font-thin'>result : <span className='font-normal'>{room.gotMarks}</span> marks</p> : <p className='text-start font-thin '><span className='font-normal'>{room.category && 'Category based question'}</span> marks</p>
+                                (validUser.usertype == 'student' && getStatus(room).status == "ended") ? <p className='text-start font-thin'>result : <span className='font-normal'>{room.gotMarks}</span> marks</p> : <p className='text-start font-thin '><span className='font-normal'>{room.category && 'Category based question'}</span>
+                                </p>
                             }
                         </div>
                     </div>

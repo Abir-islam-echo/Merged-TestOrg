@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTimer } from 'react-timer-hook';
 import Swal from 'sweetalert2';
 
 const ExamTimer = (props) => {
+    const navigate = useNavigate()
     const { remainingTime, expired, submitResult, setIsFinished } = props
     const expiryTimestamp = new Date();
     expiryTimestamp.setTime(expiryTimestamp.getTime() + remainingTime);

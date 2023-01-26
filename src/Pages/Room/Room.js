@@ -75,7 +75,8 @@ const Room = () => {
                     })
                     const sendRoom = async () => {
                         await axios.post(`https://excited-foal-raincoat.cyclic.app/room/roominfo`, { roomID: roomCode })
-                            .then(response => {                              
+                            .then(response => {
+                                console.log(response.data)                       
                                 const question = response.data.questions
                                 Swal.fire({
                                     icon: 'success',
@@ -115,7 +116,7 @@ const Room = () => {
                                                 negMarks: markingType,
                                                 createdAt: new Date(),
                                                 questions: question,
-                                                category: response.data.category,
+                                                category: category,
                                                 easyType: response.data.easyType,
                                                 hardType: response.data.hardType,
                                                 mediumType: response.data.mediumType,
@@ -125,14 +126,14 @@ const Room = () => {
                                                 totalMarksOfExam: response.data.totalMarksOfExam
                                             }
 
-                                            // console.log('room', room)
+                                            // console.log('room', newroom)
 
                                             async function sendData(newroom) {
                                                 // console.log('called')
                                                 await axios.post(`https://excited-foal-raincoat.cyclic.app/room/add-room`, newroom)
                                                     .then(response => {
                                                         // setGetRoomCode(response.data.roomCode)
-                                                        console.log('after adding room', response)
+                                                        // console.log('after adding room', response)
                                                         setTimeout(() => {
                                                             Swal.fire({
                                                                 title: 'Created exam',

@@ -1,4 +1,5 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -15,6 +16,22 @@ const ExamDetails = () => {
     const examDays = new Date(endTime).getDay() - new Date(startTime).getDay()
     const examHours = new Date(endTime).getHours() - new Date(startTime).getHours()
     const examMinutes = new Date(endTime - startTime).getMinutes()
+    // const [questions, setQuestions] = useState()
+
+    // useEffect(() => {
+    //     const p = async () => {
+    //         await axios.post(`https://excited-foal-raincoat.cyclic.app/room/student-result`, { token: validUser.token, roomID: room._id })
+    //             .then(response => {
+    //                 console.log(response.data.questions)
+    //                 setQuestions(response.data.questions)
+    //             })
+    //             .catch(err => {
+    //                 console.log(err)
+    //             })
+    //     }
+    //     p()
+
+    // }, []);
 
 
     Swal.fire({
@@ -474,26 +491,28 @@ const ExamDetails = () => {
                     <div className='m-auto flex flex-col rounded-md text-gray-800 text-xl overflow-hidden shadow-2xl'>
                         <h1 data-theme="aqua" className='text-3xl py-10'>Questions</h1>
                         {/* <span className='border-2 border-gray-400 mb-10 w-1/2 m-auto'></span> */}
-                        {
-                            room.questions.map((element, index) => {
-                                if (element.question_type === 'true-false') {
-                                    return (
-                                        <ShowTrue index={index + 1} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id} key={index}></ShowTrue>
-                                    )
-                                }
-                                else if (element.question_type === 'mcq') {
-                                    return (
-                                        <ShowQuiz key={index} index={index + 1} question={element.question} marks={element.marks} options={element.options} correct_answer={element.correct_answer} q_id={element.q_id}></ShowQuiz>
-                                    )
-                                }
-                                else if (element.question_type === 'fill-blanks') {
-                                    return (
-                                        <ShowGaps key={index} index={index + 1} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id}></ShowGaps>
-                                    )
-                                }
+                        <div>
+                            {
+                                room.questions.map((element, index) => {
+                                    if (element.question_type === 'true-false') {
+                                        return (
+                                            <ShowTrue index={index + 1} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id} key={index}></ShowTrue>
+                                        )
+                                    }
+                                    else if (element.question_type === 'mcq') {
+                                        return (
+                                            <ShowQuiz key={index} index={index + 1} question={element.question} marks={element.marks} options={element.options} correct_answer={element.correct_answer} q_id={element.q_id}></ShowQuiz>
+                                        )
+                                    }
+                                    else if (element.question_type === 'fill-blanks') {
+                                        return (
+                                            <ShowGaps key={index} index={index + 1} question={element.question} marks={element.marks} correct_answer={element.correct_answer} q_id={element.q_id}></ShowGaps>
+                                        )
+                                    }
 
-                            })
-                        }
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
             }
